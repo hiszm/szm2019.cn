@@ -1,37 +1,131 @@
-## Welcome to GitHub Pages
+> 红黑树（Red Black Tree） 是一种自平衡二叉查找树，是在计算机科学中用到的一种数据结构，典型的用途是实现关联数组。
+它是在1972年由Rudolf Bayer发明的，当时被称为平衡二叉B树（symmetric binary B-trees）。后来，在1978年被 Leo J. Guibas 和 Robert Sedgewick 修改为如今的“红黑树”。
+红黑树和AVL树类似，都是在进行插入和删除操作时通过特定操作保持二叉查找树的平衡，从而获得较高的查找性能。
+它虽然是复杂的，但它的最坏情况运行时间也是非常良好的，并且在实践中是高效的： 它可以在O(log n)时间内做查找，插入和删除，这里的n 是树中元素的数目。
 
-You can use the [editor on GitHub](https://github.com/hiszm/szm2019.cn/edit/gh-pages/index.md) to maintain and preview the content for your website in Markdown files.
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
 
-### Markdown
+#### **介绍：**
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+红黑树是一种自我平衡的二元搜索树。这些颜色用于确保树在插入和删除过程中保持平衡。虽然树的平衡并不完美，但它足以减少搜索时间并保持在 O（log n） 时间周围，其中 n 是树中元素的总数。
+这棵树是鲁道夫·拜尔于1972年发明的。
 
-```markdown
-Syntax highlighted code block
+必须注意的是，由于每个节点只需要 1 位空间来存储颜色信息
 
-# Header 1
-## Header 2
-### Header 3
+#### **每个红黑树遵循的规则：** 
 
-- Bulleted
-- List
+1. 每个节点都有红色或黑色。
+2. 树根总是黑色的。
+3. 没有两个相邻的红色节点（红色节点不能有红色父母或红色孩子）。
+4. 从节点（包括根）到其任何后代的每个路径都具有相同数量的黑色节点。
 
-1. Numbered
-2. List
+#### **为什么是红黑树？**
 
-**Bold** and _Italic_ and `Code` text
+大多数 BST 操作（例如，搜索、最大、最小、插入、删除等）都占用 O（h） 时间，其中 h 是 BST 的高度。对于偏斜的二进制树来说，这些操作的成本可能会变为 O（n）。如果我们确保每次插入和删除后树的高度保持 O（log n），那么我们可以保证所有这些操作的 O（log n） 的上限。红黑树的高度始终为 O（log n），其中 n 是树中的节点数。
 
-[Link](url) and ![Image](src)
+| 斯尔 | 算法 | 时间复杂性 |
+| :--- | :--- | :--------- |
+| 1.   | 搜索 | O（log n） |
+| 2.   | 插入 | O（log n） |
+| 3.   | 删除 | O（log n） |
+
+**"n"是红黑树中元素的总数。** 
+
+#### **与**[**AVL树**](https://www.geeksforgeeks.org/avl-tree-set-1-insertion/)的比较：
+
+与红黑树相比，AVL 树更加平衡，但在插入和删除过程中，它们可能会导致更多的旋转。因此，如果您的应用程序涉及频繁的插入和删除，那么红黑树应该是首选。如果插入和删除频率较低，搜索更频繁，则 AVL 树应优于红黑树。
+
+
+
+
+
+#### **红黑树如何保证平衡？**
+
+理解平衡的一个简单的例子是，红黑树中不可能有 3 个节点链。我们可以尝试任何颜色的组合，看到所有这些违反红黑树属性。
+
 ```
 
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
+        30             30               30       
+       / \            /  \             /  \
+     20  NIL         20   NIL         20   NIL
+    / \             / \              /  \   
+  10  NIL          10  NIL          10  NIL  
 
-### Jekyll Themes
 
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/hiszm/szm2019.cn/settings/pages). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
 
-### Support or Contact
+         20                           20
+       /   \                        /   \
+     10     30                    10     30
+    /  \   /  \                 /  \    /  \
+ NIL  NIL NIL NIL             NIL  NIL NIL NIL
+```
 
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://support.github.com/contact) and we’ll help you sort it out.
+#### **关于红黑树的有趣点：**
+
+1. 红黑树的黑色高度是从根节点到叶节点路径上的黑色节点数。叶节点也算作黑色节点。因此，一棵红黑高树h有黑色高度>=h/2。
+2. 带有 n 节点的红黑树的高度为 h<= 2 日志2（n +1）。
+3. 所有的叶子（零）都是黑色的。
+4. 节点的黑色深度定义为从根到该节点的黑色节点数，即黑色祖先的数量。
+5. 每棵红黑树都是二元树的特殊情况。
+
+#### **红黑树的黑色高度：** 
+
+黑色高度是从根到叶子路径上的黑色节点数。叶节点也计算为黑色节点。从上面属性3和4，我们可以得出，**红黑树的高度h有黑色高度>=h/2。**
+
+> 从节点到最远的后叶的节点数量不超过最近后代叶节点数的两倍。
+
+**每个带有 n 节点的红黑树都有高度<=** 2Log2（n+1）
+这可以用以下事实来证明：
+
+1. 对于一般的二进制树，让**k**成为所有根到 NULL 路径的最低节点数，然后 n >= 2k–1（前如果k是3，那么n是至少7）。此表达式也可以写成 k <= 日志2（n+1）。
+2. 从红黑树的属性4及以上索赔，我们可以说，在红黑树与n节点，有一个根到叶路径与最多日志2（n+1）黑色节点。
+3. 从红黑树属性 3 中，我们可以声称红黑树中的黑色节点数至少为 n/2 ⌊ ⌋，其中 n 是节点总数。
+
+从上述点，我们可以得出结论，红黑树与**n**节点有高度<=2Log2（n+1）
+
+#### **红黑树搜索操作：**
+
+由于每棵红黑树都是二元树的特殊情况，因此红黑树的搜索算法与二进制树相似。
+
+**算法：**
+
+```
+searchElement (tree, val)
+Step 1:
+If tree -> data = val OR tree = NULL
+    Return tree
+Else
+If val  data
+        Return searchElement (tree -> left, val)
+    Else
+        Return searchElement (tree -> right, val)
+    [ End of if ]
+[ End of if ]
+
+Step 2: END
+```
+
+对于程序，您可以将其转介为[**AVL树**](https://www.geeksforgeeks.org/binary-search-tree-set-1-search-and-insertion/)。
+
+
+
+
+
+**示例：在以下红黑树中搜索 11。** 
+ 
+
+![img](https://img-blog.csdnimg.cn/img_convert/7df11213880be8989d68e2439b3bd3ab.png)
+
+**溶液：** 
+
+1. 从根开始。
+2. 将插入元素与根进行比较，如果少于根，则向左重复，否则向右复发。
+3. 如果搜索元素在任何地方找到，返回真实，否则返回错误。
+
+![img](https://img-blog.csdnimg.cn/img_convert/e2a6e29fd1a01081c709e9585eeed729.png)
+
+跟着蓝色的泡沫走
+
+在这篇文章中，我们介绍了红黑树，并讨论了如何确保平衡。困难的部分是在添加和删除密钥时保持平衡。我们还看到了如何从红黑树中搜索元素。我们不久将讨论红黑树上即将发布的帖子的插入和删除操作。
+
+
